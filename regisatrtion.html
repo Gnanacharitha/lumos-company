@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+<title>Registration Form</title>
+<style>
+    /* Custom CSS */
+    body {
+        background-color: #81f4ef; /* Set background color */
+    }
+    .form-container {
+        background-color: #703861; /* Set form background color */
+        padding: 20px; /* Add padding */
+        border-radius: 5px; /* Add border radius */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    }
+    .center-button {
+        text-align: center; /* Center align button */
+    }
+    .error-msg {
+        color: red; /* Set color for error messages */
+    }
+    .hidden {
+        display: none; /* Hide elements with the 'hidden' class */
+    }
+</style>
+<script>
+    $(document).ready(function(){
+        // Hide the last four fields initially
+        $('.hidden').hide();
+
+        $("#btn").click(function(){
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var address = $('#address').val();
+            var city = $('#city').val();
+            var country = $('#country').val();
+            var password = $('#password').val();
+
+            // Check if any field is empty
+            if(name === '' || email === '' || phone === '' || address === '' || city === '' || country === '' || password === ''){
+                // Show error modal if any field is empty
+                $('#errorForm').modal('show'); 
+
+                // Display error messages under the fields that are left empty
+                $('#name').next('.error-msg').html(name === '' ? 'Please fill in this field' : '');
+                $('#email').next('.error-msg').html(email === '' ? 'Please fill in this field' : '');
+                $('#phone').next('.error-msg').html(phone === '' ? 'Please fill in this field' : '');
+                $('#address').next('.error-msg').html(address === '' ? 'Please fill in this field' : '');
+                $('#city').next('.error-msg').html(city === '' ? 'Please fill in this field' : '');
+                $('#country').next('.error-msg').html(country === '' ? 'Please fill in this field' : '');
+                $('#password').next('.error-msg').html(password === '' ? 'Please fill in this field' : '');
+
+                // Hide the thank you modal if it's shown
+                $('#thankYouModal').modal('hide');
+            } else {
+                // Hide error modal if all fields are filled
+                $('#errorForm').modal('hide'); 
+
+                // Show thank you modal if all fields are filled
+                $('#thankYouModal').modal('show');
+
+                // Display submitted data in thank you modal
+                $('#submittedData').html(`
+                    <p>Name: ${name}</p>
+                    <p>Email: ${email}</p>
+                    <p>Phone: ${phone}</p>
+                    <p>Address: ${address}</p>
+                    <p>City: ${city}</p>
+                    <p>Country: ${country}</p>
+                `);
+            }
+        });
+
+        $('#registrationForm').validate();
+    });
+</script>
+</head>
+<body>
+<div class="container">
+  <h2 class="text-center">Registration Form</h2>
+  <div class="row justify-content-center">
+    <div class="col-md-6 form-container">
+      <form id="registrationForm" method="post" action="register.php">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" class="form-control" id="name" name="name">
+          <div class="error-msg"></div> <!-- Error message for name field -->
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email">
+          <div class="error-msg"></div> <!-- Error message for email field -->
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone:</label>
+          <input type="tel" class="form-control" id="phone" name="phone">
+          <div class="error-msg"></div> <!-- Error message for phone field -->
+        </div>
+        <div class="form-group hidden"> <!-- Hidden by default -->
+          <label for="address">Address:</label>
+          <input type="text" class="form-control" id="address" name="address">
+          <div class="error-msg"></div> <!-- Error message for address field -->
+        </div>
+        <div class="form-group hidden"> <!-- Hidden by default -->
+          <label for="city">City:</label>
+          <input type="text" class="form-control" id="city" name="city">
+          <div class="error-msg"></div> <!-- Error message for city field -->
+        </div>
+        <div class="form-group hidden"> <!-- Hidden by default -->
+          <label for="country">Country:</label>
+          <input type="text" class="form-control" id="country" name="country">
+          <div class="error-msg"></div> <!-- Error message for country field -->
+        </div>
+        <div class="form-group hidden"> <!-- Hidden by default -->
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" name="password">
+          <div class="error-msg"></div> <!-- Error message for password field -->
+        </div>
+        <div class="center-button"> <!-- Center align button -->
+            <button type="button" id="btn" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      <div id="message"></div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="modal fade" id="thankYouModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="thankYouModalLabel">Thank You!</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <i class="fas fa-check"></i> Thank you for registering!
+          <div id="submittedData"></div> <!-- Display submitted data -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorForm" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Error</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                Please fill in all the required fields.
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
